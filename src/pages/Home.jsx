@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { projects } from "../data/projects";
+import { Terminal } from "lucide-react";
 
 export default function Home() {
   const featured = projects.slice(0, 2);
@@ -134,32 +135,29 @@ export default function Home() {
 
       <section className="home-cta">
 
-        <div className="cta-icon">
-          ✦
-        </div>
+  <div className="cta-icon">
+    <Terminal size={32} strokeWidth={2} />
+  </div>
 
-        <div className="cta-text">
+  <div className="cta-text">
+    <h3>
+      Have an opportunity in mind?
+    </h3>
 
-          <h3>
-            Have an opportunity in mind?
-          </h3>
+    <p>
+      I'm open to software engineering roles,
+      interesting projects, and collaboration.
+    </p>
+  </div>
 
-          <p>
-            I'm open to software engineering roles,
-            interesting projects, and collaboration.
-          </p>
+  <Link
+    to="/contact"
+    className="btn-primary"
+  >
+    Let's Connect →
+  </Link>
 
-        </div>
-
-        <Link
-          to="/contact"
-          className="btn-primary"
-        >
-          Let's Connect →
-        </Link>
-       
-      </section>
-
+</section>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { projects, categories } from "../data/projects";
+import { Code2 } from "lucide-react";
 import ProjectCard from "../components/ProjectCard";
 
 export default function Projects() {
@@ -40,13 +41,22 @@ export default function Projects() {
       </div>
 
       <section className="projects-cta">
-        <div className="cta-icon"></div>
-        <div className="cta-text">
-          <h3>Have a project in mind?</h3>
-          <p>I'm always open to discussing new opportunities and interesting projects.</p>
-        </div>
-        <a href="/contact" className="btn-primary">Let's Connect →</a>
-      </section>
+  <div className="cta-icon">
+    <Code2 size={32} strokeWidth={2} />
+  </div>
+
+  <div className="cta-text">
+    <h3>Have a project in mind?</h3>
+
+    <p>
+      I'm always open to discussing new opportunities and interesting projects.
+    </p>
+  </div>
+
+  <a href="/contact" className="btn-primary">
+    Let's Connect →
+  </a>
+</section>
     </div>
   );
 }
