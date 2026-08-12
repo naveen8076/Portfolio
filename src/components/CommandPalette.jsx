@@ -28,33 +28,54 @@ export default function CommandPalette({ open, onClose }) {
     },
     {
       label: "Download Resume",
-      description: "Download my resume",
+      description: "Open my resume",
       action: () => {
-        const link = document.createElement("a");
-        link.href = "/Naveen_resume.pdf";
-        link.download = "Naveen_Resume.pdf";
-        link.click();
+        window.open(
+          "https://drive.google.com/file/d/1zzeBCwl0NPlBZyc6xQGtQvKt1LApWJD0/view?usp=drive_link",
+          "_blank",
+          "noopener,noreferrer"
+        );
       },
     },
     {
       label: "GitHub",
-      description: "View my GitHub",
-      action: () =>
-        window.open("https://github.com/naveen8076", "_blank"),
+      description: "View my GitHub profile",
+      action: () => {
+        window.open(
+          "https://github.com/naveen8076",
+          "_blank",
+          "noopener,noreferrer"
+        );
+      },
     },
     {
       label: "LinkedIn",
       description: "Connect with me on LinkedIn",
-      action: () =>
+      action: () => {
         window.open(
           "https://www.linkedin.com/in/naveen-gupta-2103aug/",
-          "_blank"
-        ),
+          "_blank",
+          "noopener,noreferrer"
+        );
+      },
+    },
+    {
+      label: "LeetCode",
+      description: "View my LeetCode profile",
+      action: () => {
+        window.open(
+          "https://leetcode.com/u/Naveen__21/",
+          "_blank",
+          "noopener,noreferrer"
+        );
+      },
     },
   ];
 
-  const filteredCommands = commands.filter((command) =>
-    command.label.toLowerCase().includes(search.toLowerCase())
+  const filteredCommands = commands.filter(
+    (command) =>
+      command.label.toLowerCase().includes(search.toLowerCase()) ||
+      command.description.toLowerCase().includes(search.toLowerCase())
   );
 
   const executeCommand = (command) => {
@@ -68,6 +89,7 @@ export default function CommandPalette({ open, onClose }) {
 
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
+        setSearch("");
         onClose();
       }
     };
@@ -79,16 +101,28 @@ export default function CommandPalette({ open, onClose }) {
     };
   }, [open, onClose]);
 
+  useEffect(() => {
+    if (!open) {
+      setSearch("");
+    }
+  }, [open]);
+
   if (!open) return null;
 
   return (
-    <div className="command-overlay" onClick={onClose}>
+    <div
+      className="command-overlay"
+      onClick={() => {
+        setSearch("");
+        onClose();
+      }}
+    >
       <div
         className="command-palette"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="command-search">
-          <span>⌕</span>
+          <span className="search-symbol">⌕</span>
 
           <input
             autoFocus
@@ -109,17 +143,17 @@ export default function CommandPalette({ open, onClose }) {
                 className="command-item"
                 onClick={() => executeCommand(command)}
               >
-                <div className="command-icon">→</div>
+                <span className="command-arrow">→</span>
 
-                <div className="command-info">
-                  <span>{command.label}</span>
+                <span className="command-info">
+                  <strong>{command.label}</strong>
                   <small>{command.description}</small>
-                </div>
+                </span>
               </button>
             ))
           ) : (
-            <div className="no-results">
-              No commands found.
+            <div className="command-empty">
+              No results found.
             </div>
           )}
         </div>

@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import CommandPalette from "./CommandPalette";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
-  const [search, setSearch] = useState("");
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,7 +22,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleShortcut = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        e.key.toLowerCase() === "k"
+      ) {
         e.preventDefault();
         setCommandOpen(true);
       }
@@ -48,80 +49,11 @@ export default function Navbar() {
     { to: "/contact", label: "Contact" },
   ];
 
-  const commands = [
-    {
-      label: "Home",
-      description: "Go to homepage",
-      action: () => navigate("/"),
-    },
-    {
-      label: "About",
-      description: "Learn more about me",
-      action: () => navigate("/about"),
-    },
-    {
-      label: "Projects",
-      description: "View my projects",
-      action: () => navigate("/projects"),
-    },
-    {
-      label: "Contact",
-      description: "Get in touch",
-      action: () => navigate("/contact"),
-    },
-    {
-      label: "Download Resume",
-      description: "Open my resume",
-      action: () => {
-        window.open(
-          "https://drive.google.com/file/d/1zzeBCwl0NPlBZyc6xQGtQvKt1LApWJD0/view?usp=drive_link",
-          "_blank",
-          "noopener,noreferrer"
-        );
-      },
-    },
-    {
-      label: "GitHub",
-      description: "View my GitHub profile",
-      action: () => {
-        window.open(
-          "https://github.com/naveen8076",
-          "_blank",
-          "noopener,noreferrer"
-        );
-      },
-    },
-    {
-      label: "LinkedIn",
-      description: "Connect with me on LinkedIn",
-      action: () => {
-        window.open(
-          "https://www.linkedin.com/in/naveen-gupta-2103aug/",
-          "_blank",
-          "noopener,noreferrer"
-        );
-      },
-    },
-  ];
-
-  const filteredCommands = commands.filter(
-    (command) =>
-      command.label.toLowerCase().includes(search.toLowerCase()) ||
-      command.description.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const executeCommand = (command) => {
-    command.action();
-
-    setSearch("");
-    setCommandOpen(false);
-    setOpen(false);
-  };
-
   return (
     <>
       <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
         <nav className="navbar">
+
           <NavLink
             to="/"
             className="logo"
@@ -158,7 +90,7 @@ export default function Navbar() {
               <span className="search-icon">⌕</span>
               <kbd>Ctrl K</kbd>
             </button>
-             
+
             <a
               href="https://drive.google.com/file/d/1zzeBCwl0NPlBZyc6xQGtQvKt1LApWJD0/view?usp=drive_link"
               target="_blank"
@@ -179,70 +111,14 @@ export default function Navbar() {
               <span />
             </button>
           </div>
+
         </nav>
       </header>
 
-      {commandOpen && (
-        <div
-          className="command-overlay"
-          onClick={() => {
-            setCommandOpen(false);
-            setSearch("");
-          }}
-        >
-          <div
-            className="command-palette"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="command-search">
-              <span className="search-symbol">⌕</span>
-
-              <input
-                autoFocus
-                type="text"
-                placeholder="Search portfolio..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-
-              <kbd>ESC</kbd>
-            </div>
-
-            <div className="command-list">
-              {filteredCommands.length > 0 ? (
-                filteredCommands.map((command) => (
-                  <button
-                    key={command.label}
-                    className="command-item"
-                    onClick={() => executeCommand(command)}
-                  >
-                    <span className="command-arrow">→</span>
-
-                    <span className="command-info">
-                      <strong>{command.label}</strong>
-                      <small>{command.description}</small>
-                    </span>
-                  </button>
-                ))
-              ) : (
-                <div className="command-empty">
-                  No results found.
-                </div>
-              )}
-            </div>
-
-            <div className="command-footer">
-              <span>
-                <kbd>↵</kbd> Select
-              </span>
-
-              <span>
-                <kbd>ESC</kbd> Close
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
+      <CommandPalette
+        open={commandOpen}
+        onClose={() => setCommandOpen(false)}
+      />
     </>
   );
 }
